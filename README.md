@@ -2,6 +2,8 @@
 Backend Manager Application for SEG Djangoals. 
 This application provides an interface to interact with the backend directly for seeding and un-seeding, as well as testing out various backend features without the need of a frontend client.
 
+> **Please note: Seeding and unseeding a large number of users (>100) is *pricey*. Please check [this](https://console.firebase.google.com/project/seg-djangoals/usage) page to see if we are hitting our free daily max.**
+
 ## Local setup
 In order to use this application, you must setup credentials on your machine and install dependencies. Follow this guide:
 1. Open this [link](https://console.firebase.google.com/project/seg-djangoals/settings/serviceaccounts/adminsdk)
