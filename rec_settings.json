@@ -1,0 +1,6 @@
+{
+    "number_of_recommendations": 5,
+    "max_distance": 10,
+    "min_age": 20,
+    "max_age": 25
+}

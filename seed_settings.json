@@ -1,0 +1,42 @@
+{
+    "number": 100,
+    "age_span": {
+        "from": 18,
+        "to": 30
+    },
+    "location_span": {
+        "lat0": 51.2395663,
+        "lat1": 51.7712392,
+        "lon0": -0.5932617,
+        "lon1": 0.4985046
+    },
+    "genders": [
+        "male",
+        "female",
+        "non-binary"
+    ],
+    "categories": {
+        "sports": [
+            "running",
+            "biking",
+            "surfing"
+        ],
+        "hobbies": [
+            "reading",
+            "volunteering",
+            "baking"
+        ],
+        "foods_drinks": [
+            "tea",
+            "coffee",
+            "pizza",
+            "burgers"
+        ],
+        "religion": [
+            "christian",
+            "islam",
+            "hinduism",
+            "buddhism"
+        ]
+    }
+}
