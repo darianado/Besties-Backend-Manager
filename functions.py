@@ -9,7 +9,7 @@ class FirebaseHandler():
     BATCH_SIZE = 500
     CREDENTIALS_FILENAME = 'serviceAccountKey.json'
 
-    def get_credentials(cert):
+    def get_credentials(self, cert):
         try:
             return credentials.Certificate(cert)
         except:
