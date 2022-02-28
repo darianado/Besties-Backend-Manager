@@ -81,7 +81,10 @@ def get_recommendations():
     rec_url = data["recommendations_url"]
 
     payload = {
-        "userId": input("Type a user ID: "),
+        "user_id": input("Type a user ID: "),
+        "number_of_recommendations": data["number_of_recommendations"],
+        "max_age": data["max_age"],
+        "min_age": data["min_age"]
     }
 
     response = requests.post(rec_url, json=payload)
