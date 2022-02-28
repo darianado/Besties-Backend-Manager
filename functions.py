@@ -76,7 +76,7 @@ def unseed_database():
 
 @safe_exit
 def get_recommendations():
-    url = "https://us-central1-seg-djangoals.cloudfunctions.net/getRecHTTPs"
+    url = "http://localhost:5001/seg-djangoals/us-central1/getRecHTTPs"
     payload = {}
 
     payload["userId"] = input("Type a user ID: ")
