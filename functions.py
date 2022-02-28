@@ -76,12 +76,15 @@ def unseed_database():
 
 @safe_exit
 def get_recommendations():
-    url = "http://localhost:5001/seg-djangoals/us-central1/getRecHTTPs"
-    payload = {}
+    data = json.load(open("rec_settings.json"))
 
-    payload["userId"] = input("Type a user ID: ")
+    rec_url = data["recommendations_url"]
 
-    response = requests.post(url, json=payload)
+    payload = {
+        "userId": input("Type a user ID: "),
+    }
+
+    response = requests.post(rec_url, json=payload)
     json_response = json.loads(response.text)
 
     print(json_response)

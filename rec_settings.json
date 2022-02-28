@@ -1,4 +1,5 @@
 {
+    "recommendations_url": "https://us-central1-seg-djangoals.cloudfunctions.net/getRecHTTPs",
     "number_of_recommendations": 5,
     "max_distance": 10,
     "min_age": 20,
