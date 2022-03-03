@@ -1,7 +1,6 @@
 {
-    "recommendations_url": "http://localhost:5001/seg-djangoals/us-central1/getRecHTTPs",
-    "number_of_recommendations": 5,
-    "max_distance": 10,
-    "min_age": 20,
-    "max_age": 25
+    "local_rec_url": "http://localhost:5001/seg-djangoals/us-central1/requestRecommendations",
+    "production_rec_url": "https://us-central1-seg-djangoals.cloudfunctions.net/requestRecommendations",
+    "test_mode": false,
+    "recs": 20
 }

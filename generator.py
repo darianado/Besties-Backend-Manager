@@ -39,13 +39,17 @@ class Generator():
 
     def generate_user(self):
         return {
-            "first_name": self.fake.first_name(),
-            "last_name": self.fake.last_name(),
+            "firstName": self.fake.first_name(),
+            "lastName": self.fake.last_name(),
             "age": self._pick_age(),
             "gender": self._pick_gender(),
             "location": self._pick_location(),
             "interests": self._pick_interests(),
-            "preferences": self._pick_interests()
+            "preferences": {
+              "interests": self._pick_interests(),
+              "maxAge": self.age_span['to'],
+              "minAge": self.age_span['from']
+            }
         }
 
     def generate(self):

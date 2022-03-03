@@ -78,13 +78,11 @@ def unseed_database():
 def get_recommendations():
     data = json.load(open("rec_settings.json"))
 
-    rec_url = data["recommendations_url"]
+    rec_url = data["local_rec_url"] if (data["test_mode"]) else data["production_rec_url"]
 
     payload = {
-        "user_id": input("Type a user ID: "),
-        "number_of_recommendations": data["number_of_recommendations"],
-        "max_age": data["max_age"],
-        "min_age": data["min_age"]
+        "userId": input("Type a user ID: "),
+        "recs": data["recs"]
     }
 
     response = requests.post(rec_url, json=payload)
