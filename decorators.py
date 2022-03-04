@@ -11,7 +11,7 @@ def sleepy_exit(function):
 
     def sleepy_function():
         function()
-        time.sleep(1)
+        time.sleep(3)
         
     return sleepy_function
 

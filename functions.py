@@ -1,8 +1,8 @@
-import json
+import json, os, uuid
 from decorators import sleepy_exit, safe_exit
 from generator import Generator
 import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase_admin import credentials, firestore, storage
 import requests
 
 class FirebaseHandler():
@@ -10,45 +10,68 @@ class FirebaseHandler():
     CREDENTIALS_FILENAME = 'serviceAccountKey.json'
 
     def get_credentials(self, cert):
-        try:
-            return credentials.Certificate(cert)
-        except:
-            raise 
+      try:
+        return credentials.Certificate(cert)
+      except:
+        raise 
 
     def __init__(self):
         cred = self.get_credentials(self.CREDENTIALS_FILENAME)
-        firebase_admin.initialize_app(cred)
+        firebase_admin.initialize_app(cred, {
+          'storageBucket': 'seg-djangoals.appspot.com'
+        })
 
         self.db = firestore.client()
+        self.bucket = storage.bucket()
+
+    def save_images(self, data):
+      for user_data in data:
+        local_paths = user_data.pop("images")
+
+        for local_path in local_paths:
+          blob_base_path = "user_avatars/" + user_data["uid"] + "/"
+          blob = self.bucket.blob(blob_base_path + uuid.uuid4().hex + ".jpg")
+          blob.content_type = "image/jpeg"
+          
+          with open(local_path, 'rb') as file:
+            blob.upload_from_file(file)
+      
+      return data
 
     def save_users(self, data):
-        USER_DATA_REF = self.db.collection("users")
-        split_size = min(self.BATCH_SIZE, len(data))
+      USER_DATA_REF = self.db.collection("users")
+      split_size = min(self.BATCH_SIZE, len(data))
 
-        for split in [data[i:i + split_size] for i in range(0, len(data), split_size)]:
-            batch = self.db.batch()
+      for split in [data[i:i + split_size] for i in range(0, len(data), split_size)]:
+        batch = self.db.batch()
 
-            for user_data in split:
-                batch.set(USER_DATA_REF.document(), user_data)
+        for user_data in split:
+          uid = user_data.pop('uid')
+          batch.set(USER_DATA_REF.document(uid), user_data)
 
-            batch.commit()
+        batch.commit()
+
+    def delete_all_user_avatars(self):
+      blobs = self.bucket.list_blobs(prefix="user_avatars")
+      for blob in blobs:
+        blob.delete()
 
     def delete_all_users(self):
-        USER_DATA_REF = self.db.collection("users")
+      USER_DATA_REF = self.db.collection("users")
 
-        docs = USER_DATA_REF.limit(self.BATCH_SIZE).stream()
+      docs = USER_DATA_REF.limit(self.BATCH_SIZE).stream()
 
-        deleted = 0
+      deleted = 0
 
-        for doc in docs:
-            doc.reference.delete()
-            deleted = deleted + 1
-            print(".", end="", flush=True)
+      for doc in docs:
+        doc.reference.delete()
+        deleted = deleted + 1
+        print(".", end="", flush=True)
 
-        if deleted >= self.BATCH_SIZE:
-            return self.delete_all_users()
-        else:
-            print("")
+      if deleted >= self.BATCH_SIZE:
+        return self.delete_all_users()
+      else:
+        print("")
 
 
 handler = FirebaseHandler()
@@ -61,8 +84,11 @@ def seed_database():
     print("Generating users... ", end="", flush=True)
     data = generator.generate()
     print("OK")
+    print("Saving images to Storage... ", end="", flush=True)
+    modified_data = handler.save_images(data)
+    print("OK")
     print("Saving users to Firestore... ", end="", flush=True)
-    handler.save_users(data)
+    handler.save_users(modified_data)
     print("OK")
     print("DONE")
 
@@ -70,7 +96,12 @@ def seed_database():
 @safe_exit
 def unseed_database():
     print("Unseeding users")
+    print("Deleting all user avatars... ", end="", flush=True)
+    handler.delete_all_user_avatars()
+    print("OK")
+    print("Deleting all user data... ", end="", flush=True)
     handler.delete_all_users()
+    print("OK")
     print("DONE")
 
 

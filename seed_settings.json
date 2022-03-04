@@ -1,9 +1,10 @@
 {
-    "number": 100,
+    "number": 3,
     "age_span": {
         "from": 18,
         "to": 30
     },
+    "image_folder": "assets/images/",
     "location_span": {
         "lat0": 51.2395663,
         "lat1": 51.7712392,

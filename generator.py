@@ -1,5 +1,7 @@
 import json
+import os, glob
 import random
+import uuid
 import faker
 
 class Generator():
@@ -9,6 +11,7 @@ class Generator():
 
         self.fake = faker.Faker()
 
+        self.image_folder = file['image_folder']
         self.number = file['number']
         self.age_span = file['age_span']
         self.genders = file['genders']
@@ -37,20 +40,27 @@ class Generator():
         return picked
 
 
+    def _pick_photos(self):
+      files = glob.glob(self.image_folder + "*.jpg")
+      return [random.choice(files)]
+
+
     def generate_user(self):
-        return {
-            "firstName": self.fake.first_name(),
-            "lastName": self.fake.last_name(),
-            "age": self._pick_age(),
-            "gender": self._pick_gender(),
-            "location": self._pick_location(),
-            "interests": self._pick_interests(),
-            "preferences": {
-              "interests": self._pick_interests(),
-              "maxAge": self.age_span['to'],
-              "minAge": self.age_span['from']
-            }
+      return {
+        "uid": uuid.uuid4().hex,
+        "images": self._pick_photos(),
+        "firstName": self.fake.first_name(),
+        "lastName": self.fake.last_name(),
+        "age": self._pick_age(),
+        "gender": self._pick_gender(),
+        "location": self._pick_location(),
+        "interests": self._pick_interests(),
+        "preferences": {
+          "interests": self._pick_interests(),
+          "maxAge": self.age_span['to'],
+          "minAge": self.age_span['from']
         }
+      }
 
     def generate(self):
         users = []
