@@ -22,35 +22,55 @@
         "female",
         "non-binary"
       ],
-      "relationshipStatuses": [
+      "relationship_statuses": [
         "single",
         "taken",
         "complicated"
       ],
-      "categories": {
-        "sports": [
-          "running",
-          "biking",
-          "surfing"
-        ],
-        "hobbies": [
-          "reading",
-          "volunteering",
-          "baking"
-        ],
-        "foods_drinks": [
-          "tea",
-          "coffee",
-          "pizza",
-          "burgers"
-        ],
-        "religion": [
-          "christian",
-          "islam",
-          "hinduism",
-          "buddhism"
-        ]
-      },
+      "categorized_interests": [
+        {
+          "title": "sports",
+          "entries": [
+            "running",
+            "biking",
+            "surfing"
+          ]
+        },
+        {
+          "title": "hobbies",
+          "entries": [
+            "reading",
+            "volunteering",
+            "baking"
+          ]
+        },
+        {
+          "title": "foods_drinks",
+          "entries": [
+            "tea",
+            "coffee",
+            "pizza",
+            "burgers"
+          ]
+        },
+        {
+          "title": "religion",
+          "entries": [
+            "christian",
+            "islam",
+            "hinduism",
+            "buddhism"
+          ]
+        },
+        {
+          "title": "sports",
+          "entries": [
+            "running",
+            "biking",
+            "surfing"
+          ]
+        }
+      ],
       "universities": [
         "King's College London",
         "University College London",

@@ -4,11 +4,16 @@ from consolemenu.items import *
 from functions import seed_database, unseed_database, get_recommendations
 import platform
 
+from settings_reader import SettingsReader
+
 NAME = "Backend Manager"
+SETTINGS_FILENAME = "settings.json"
 SEED_SETTINGS_FILENAME = "seed_settings.json"
 REC_SETTINGS_FILENAME = "rec_settings.json"
 
+settings_reader = SettingsReader()
 
+"""
 menu = ConsoleMenu(NAME, subtitle="Helper tool for developing and testing backend for the Djangoals SEG group project.", prologue_text="For Mac and Windows only.")
 
 
@@ -38,3 +43,4 @@ menu.append_item(seeding_item)
 menu.append_item(recommendation_item)
 
 menu.show()
+"""
