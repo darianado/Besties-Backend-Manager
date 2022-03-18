@@ -1,4 +1,4 @@
-#!/Users/nikolajbankejensen/Desktop/LGP/backend-manager/venv/bin/python
+#!/Users/nikolajbankejensen/Desktop/LGP/backend-manager/venv/bin/python3.9
 # -*- coding: utf-8 -*-
 import re
 import sys

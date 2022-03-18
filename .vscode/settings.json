@@ -3,5 +3,6 @@
       "Djangoals",
       "pytz",
       "unseed"
-    ]
+    ],
+    "python.formatting.provider": "autopep8"
 }

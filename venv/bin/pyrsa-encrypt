@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/Users/nikolajbankejensen/Library/Mobile Documents/com~apple~CloudDocs/Documents/KCL/Year 2/Semester 1/SEG/LGP/backend-manager/venv/bin/python3.9" "$0" "$@"
-' '''
+#!/Users/nikolajbankejensen/Desktop/LGP/backend-manager/venv/bin/python3.9
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -1,4 +1,4 @@
-#!/Users/nikolajbankejensen/Library/Mobile Documents/com~apple~CloudDocs/Documents/KCL/Year 2/Semester 1/SEG/LGP/backend-manager/venv/bin/python3.9
+#!/Users/nikolajbankejensen/Desktop/LGP/backend-manager/venv/bin/python3.9
 # -*- coding: utf-8 -*-
 # Copyright 2020 Google LLC
 #

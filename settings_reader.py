@@ -1,6 +1,7 @@
 import json
-from datetime import datetime
+import datetime
 from typing import Dict, List
+import pytz
 from abc import ABC, abstractmethod
 
 from constants import SETTINGS_FILENAME
@@ -12,6 +13,7 @@ class ConstructableFromDict(ABC):
   def from_dict(cls, dict: Dict[str, any]):
     pass
 
+
 class ListConstructableFromDict(ABC):
   @classmethod
   @abstractmethod
@@ -19,32 +21,31 @@ class ListConstructableFromDict(ABC):
     pass
 
 
-
-
 class AgeSpan(ConstructableFromDict):
-  def __init__(self,
-               from_date: datetime,
-               to_date: datetime):
-    self.from_date = from_date,
+  def __init__(self, from_date: datetime, to_date: datetime):
+    self.from_date = (from_date,)
     self.to_date = to_date
 
   @classmethod
   def from_dict(cls, dict: Dict[str, any]):
-    return cls(datetime.now(),
-               datetime.now())
+    age_from = dict["from"]
+    age_to = dict["to"]
+
+    age_from_date = datetime.datetime(age_from["year"], age_from["month"], age_from["day"], tzinfo=pytz.UTC)
+    age_to_date = datetime.datetime(age_to["year"], age_to["month"], age_to["day"], tzinfo=pytz.UTC)
+
+    return cls(age_from_date,
+               age_to_date)
 
 
 class InterestCategory(ConstructableFromDict, ListConstructableFromDict):
-  def __init__(self,
-               title: str,
-               entries: List[str]):
+  def __init__(self, title: str, entries: List[str]):
     self.title = title
     self.entries = entries
 
   @classmethod
   def from_dict(cls, dict: Dict[str, any]):
-    return cls(dict['title'],
-               dict['entries'])
+    return cls(dict["title"], dict["entries"])
 
   @classmethod
   def from_list_of_dicts(cls, list: List[Dict[str, any]]):
@@ -64,13 +65,12 @@ class AppContext(ConstructableFromDict):
 
   @classmethod
   def from_dict(cls, dict: Dict[str, any]):
-    categorized_interests = InterestCategory.from_list_of_dicts(
-      dict["categorized_interests"])
+    categorized_interests = InterestCategory.from_list_of_dicts(dict["categorized_interests"])
 
-    return cls(dict['genders'],
-               dict['relationship_statuses'],
+    return cls(dict["genders"],
+               dict["relationship_statuses"],
                categorized_interests,
-               dict['universities'])
+               dict["universities"])
 
 
 class SeedSettings(ConstructableFromDict):
@@ -124,8 +124,7 @@ class Settings(ConstructableFromDict):
   @classmethod
   def from_dict(cls, dict: Dict[str, any]):
     seed_settings = SeedSettings.from_dict(dict["seeding"])
-    recommendation_settings = RecommendationSettings.from_dict(
-      dict["recommendations"])
+    recommendation_settings = RecommendationSettings.from_dict(dict["recommendations"])
 
     return cls(seed_settings, recommendation_settings)
 
@@ -140,6 +139,8 @@ class SettingsReader:
     try:
       return json.load(open(SETTINGS_FILENAME))
     except:
-      print(f"""ERROR: Could not load settings file. 
+      print(
+        f"""ERROR: Could not load settings file. 
       Please check that a file by the name \'{SETTINGS_FILENAME}\' exists, 
-      and contains properly formatted json.""")
+      and contains properly formatted json."""
+      )
