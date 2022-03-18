@@ -1,6 +1,6 @@
 {
-    "local_rec_url": "http://localhost:5001/seg-djangoals/us-central1/requestRecommendations",
-    "production_rec_url": "https://us-central1-seg-djangoals.cloudfunctions.net/requestRecommendations",
+    "local_url": "http://localhost:5001/seg-djangoals/europe-west2/requestRecommendations",
+    "production_url": "https://europe-west2-seg-djangoals.cloudfunctions.net/requestRecommendations",
     "test_mode": false,
-    "recs": 20
+    "recs": 3
 }

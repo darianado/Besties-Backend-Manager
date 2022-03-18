@@ -1,8 +1,10 @@
 # Import the necessary packages
+import sys
+import time
 from consolemenu import *
 from consolemenu.items import *
 from functions import seed_database, unseed_database, get_recommendations
-import platform
+import platform, subprocess, json, os
 
 from settings_reader import SettingsReader
 
@@ -15,6 +17,22 @@ settings_reader = SettingsReader()
 
 """
 menu = ConsoleMenu(NAME, subtitle="Helper tool for developing and testing backend for the Djangoals SEG group project.", prologue_text="For Mac and Windows only.")
+MAIN_SETTINGS_FILENAME = "main_settings.json"
+SEED_SETTINGS_FILENAME = "seed_settings.json"
+REC_SETTINGS_FILENAME = "rec_settings.json"
+
+print("Configuring environment...")
+data = json.load(open(MAIN_SETTINGS_FILENAME))
+
+# export FIRESTORE_EMULATOR_HOST="localhost:8080"
+
+env_var_set = os.environ.get('FIRESTORE_EMULATOR_HOST') is not None
+
+prologue = "For Mac and Windows only.\n\r"
+prologue += "Running in production mode!!\nTo run locally, exit application and run this command:\n'export FIRESTORE_EMULATOR_HOST=\"localhost:8080\"'.\nThen restart the application." if not env_var_set else "Running in local mode.\nFirebase Storage is disabled.\nTo switch, restart your terminal and this application."
+
+
+menu = ConsoleMenu(NAME, subtitle="Helper tool for developing and testing backend for the Djangoals SEG group project.", prologue_text=prologue)
 
 
 seeding_menu = ConsoleMenu(NAME, "Seed and unseed the database, or change settings for seeding.")

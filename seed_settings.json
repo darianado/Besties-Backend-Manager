@@ -1,8 +1,16 @@
 {
-    "number": 3,
+    "number": 2,
     "age_span": {
-        "from": 18,
-        "to": 30
+        "from": {
+          "year": 1997,
+          "month": 2,
+          "day": 10
+        },
+        "to": {
+          "year": 2000,
+          "month": 2,
+          "day": 10
+        }
     },
     "image_folder": "assets/images/",
     "location_span": {
@@ -15,6 +23,11 @@
         "male",
         "female",
         "non-binary"
+    ],
+    "relationshipStatuses": [
+        "single",
+        "taken",
+        "complicated"
     ],
     "categories": {
         "sports": [
@@ -39,5 +52,13 @@
             "hinduism",
             "buddhism"
         ]
-    }
+    },
+    "universities": [
+      "King's College London",
+      "University College London",
+      "University of Oxford",
+      "University of Cambridge",
+      "Queen Mary University of London",
+      "Manchester University"
+    ]
 }

@@ -1,3 +1,4 @@
+import time
 import json, os, uuid
 from decorators import sleepy_exit, safe_exit
 from generator import Generator
@@ -18,7 +19,7 @@ class FirebaseHandler():
     def __init__(self):
         cred = self.get_credentials(self.CREDENTIALS_FILENAME)
         firebase_admin.initialize_app(cred, {
-          'storageBucket': 'seg-djangoals.appspot.com'
+          'storageBucket': 'seg-djangoals.appspot.com',
         })
 
         self.db = firestore.client()
@@ -35,8 +36,6 @@ class FirebaseHandler():
           
           with open(local_path, 'rb') as file:
             blob.upload_from_file(file)
-      
-      return data
 
     def save_users(self, data):
       USER_DATA_REF = self.db.collection("users")
@@ -47,6 +46,7 @@ class FirebaseHandler():
 
         for user_data in split:
           uid = user_data.pop('uid')
+          user_data.pop('images', None)
           batch.set(USER_DATA_REF.document(uid), user_data)
 
         batch.commit()
@@ -81,14 +81,17 @@ handler = FirebaseHandler()
 def seed_database():
     print("Seeding users")
     generator = Generator("seed_settings.json")
+    settings = json.load(open("main_settings.json"))
+
     print("Generating users... ", end="", flush=True)
     data = generator.generate()
     print("OK")
-    print("Saving images to Storage... ", end="", flush=True)
-    modified_data = handler.save_images(data)
-    print("OK")
+    if(not os.environ.get('FIRESTORE_EMULATOR_HOST')):
+      print("Saving images to Storage... ", end="", flush=True)
+      handler.save_images(data)
+      print("OK")
     print("Saving users to Firestore... ", end="", flush=True)
-    handler.save_users(modified_data)
+    handler.save_users(data)
     print("OK")
     print("DONE")
 
@@ -96,9 +99,10 @@ def seed_database():
 @safe_exit
 def unseed_database():
     print("Unseeding users")
-    print("Deleting all user avatars... ", end="", flush=True)
-    handler.delete_all_user_avatars()
-    print("OK")
+    if(not os.environ.get('FIRESTORE_EMULATOR_HOST')):
+      print("Deleting all user avatars... ", end="", flush=True)
+      handler.delete_all_user_avatars()
+      print("OK")
     print("Deleting all user data... ", end="", flush=True)
     handler.delete_all_users()
     print("OK")
@@ -109,7 +113,10 @@ def unseed_database():
 def get_recommendations():
     data = json.load(open("rec_settings.json"))
 
-    rec_url = data["local_rec_url"] if (data["test_mode"]) else data["production_rec_url"]
+    if(not os.environ.get('FIRESTORE_EMULATOR_HOST')):
+      rec_url = data["production_url"]
+    else:
+      rec_url = data["local_url"]
 
     payload = {
         "userId": input("Type a user ID: "),
