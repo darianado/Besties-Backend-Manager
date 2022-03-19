@@ -1,66 +1,80 @@
-import time
+import subprocess
+import sys
+import time, os
 from consolemenu import *
 from consolemenu.format import *
 from consolemenu.items import *
 
 from constants import (APPLICATION_DESCRIPTION, APPLICATION_NAME,
                        EPILOGUE_TEXT, SETTINGS_FILENAME)
-from decorators import safe_exit, sleepy_exit
-from environment_analyzer import EnvironmentAnalyzer
+from environment_manager import EnvironmentManager
 from functions import Functions
-from utils import load_settings
+from services.services_manager import ServicesManager
+from utils import load_settings, update_settings_field
 
-def main():
-  environment_analyzer = EnvironmentAnalyzer()
-  settings = load_settings()
-  functions = Functions(settings)
+class Runner:
 
-  # Define menus
-  main_menu = generate_menu(environment_analyzer)
-  seed_menu = generate_menu(environment_analyzer)
-  recommendations_menu = generate_menu(environment_analyzer)
+  def __init__(self):
+    self.environment_manager = EnvironmentManager()
+    self.services_manager = ServicesManager(self.environment_manager)
+    self.functions = Functions(self.services_manager)
 
-  # Define items
-  settings_item = CommandItem("Open settings in VSCode", environment_analyzer.get_command_for_opening_file_in_environment(SETTINGS_FILENAME))
-  seed_item = FunctionItem("Seed", functions.seed)
-  unseed_item = FunctionItem("Unseed", functions.unseed)
+    self.show_menu(self.environment_manager, self.functions)
 
-  recommendation_item = FunctionItem("Get Recommendations", functions.get_recommendations)
+  def switch_run_mode(self):
+    self.environment_manager.switch_run_mode()
+    os.execl(sys.executable, '"{}"'.format(sys.executable), *sys.argv)  # To hard-restart this app
 
-  # Populate menus
-  seed_menu.append_item(settings_item)
-  seed_menu.append_item(seed_item)
-  seed_menu.append_item(unseed_item)
-  seed_submenu = SubmenuItem("Seed/Unseed", seed_menu, main_menu)
+  def show_menu(self, environment_manager: EnvironmentManager, functions: Functions):
+    # Define menus
+    main_menu = self._generate_menu(environment_manager)
+    seed_menu = self._generate_menu(environment_manager)
+    recommendations_menu = self._generate_menu(environment_manager)
 
-  recommendations_menu.append_item(settings_item)
-  recommendations_menu.append_item(recommendation_item)
-  recommendations_submenu = SubmenuItem("Recommendations", seed_menu, main_menu)
+    # Define items
+    settings_item = CommandItem("Open settings in VSCode", environment_manager.get_command_for_opening_file_in_environment(SETTINGS_FILENAME))
+    seed_item = FunctionItem("Seed", functions.seed)
+    unseed_item = FunctionItem("Unseed", functions.unseed)
 
-  main_menu.append_item(seed_submenu)
-  main_menu.append_item(recommendations_submenu)
+    env_item = FunctionItem("Switch run mode", self.switch_run_mode, should_exit=True)
 
-  # Show menu.
-  main_menu.show()
+    recommendation_item = FunctionItem("Get Recommendations", functions.get_recommendations)
+
+    # Populate menus
+    seed_menu.append_item(settings_item)
+    seed_menu.append_item(seed_item)
+    seed_menu.append_item(unseed_item)
+    seed_submenu = SubmenuItem("Seed/Unseed", seed_menu, main_menu)
+
+    recommendations_menu.append_item(settings_item)
+    recommendations_menu.append_item(recommendation_item)
+    recommendations_submenu = SubmenuItem("Recommendations", recommendations_menu, main_menu)
+
+    main_menu.append_item(seed_submenu)
+    main_menu.append_item(recommendations_submenu)
+    main_menu.append_item(env_item)
+
+    # Show menu.
+    main_menu.show()
 
 
-def create_prologue(environment_analyzer: EnvironmentAnalyzer):
-  result = environment_analyzer.get_environment_description()
-  result += "\n"
-  result += environment_analyzer.get_available_features_description()
-  return result
+  def _create_prologue(self, environment_manager: EnvironmentManager):
+    result = environment_manager.get_environment_description()
+    result += "\n"
+    result += self.services_manager.get_available_features_description()
+    return result
 
 
-def generate_menu(environment_analyzer: EnvironmentAnalyzer):
-  return ConsoleMenu(APPLICATION_NAME,
-                     subtitle=APPLICATION_DESCRIPTION,
-                     prologue_text=create_prologue(environment_analyzer),
-                     epilogue_text=EPILOGUE_TEXT,
-                     formatter=MenuFormatBuilder()
-                     .set_title_align('center')
-                     .set_subtitle_align('center')
-                     .set_border_style_type(MenuBorderStyleType.DOUBLE_LINE_BORDER)
-                     .show_prologue_top_border(True)
-                     .show_prologue_bottom_border(True))
+  def _generate_menu(self, environment_manager: EnvironmentManager):
+    return ConsoleMenu(APPLICATION_NAME,
+                      subtitle=APPLICATION_DESCRIPTION,
+                      prologue_text=self._create_prologue(environment_manager),
+                      epilogue_text=EPILOGUE_TEXT,
+                      formatter=MenuFormatBuilder()
+                      .set_title_align('center')
+                      .set_subtitle_align('center')
+                      .set_border_style_type(MenuBorderStyleType.DOUBLE_LINE_BORDER)
+                      .show_prologue_top_border(True)
+                      .show_prologue_bottom_border(True))
 
-main()
+Runner()

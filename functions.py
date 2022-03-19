@@ -1,27 +1,34 @@
 import time
 import json, os, uuid
+from typing import List
 from decorators import sleepy_exit, safe_exit
-from generator import Generator
 import firebase_admin
 from firebase_admin import credentials, firestore, storage
 import requests
+from services.auth_service import Generator, Seedable, SeedableService
 
-from seeder import Seeder
+from constants import CIRCLES_BAR, CIRCLES_BAR_SPINNER
 
+from services.services_manager import ServicesManager
+from alive_progress import alive_bar
+from utils import load_settings
 
 class Functions():
-  def __init__(self, settings):
-    self.seeder = Seeder(settings)
+  def __init__(self, services_manager: ServicesManager):
+    self.services_manager = services_manager
+    self.seeder = Seeder()
 
   @sleepy_exit
   @safe_exit
   def seed(self):
-    self.seeder.seed()
+    services = self.services_manager.get_seedable_services()
+    self.seeder.seed(services)
 
   @sleepy_exit
   @safe_exit
   def unseed(self):
-    self.seeder.unseed()
+    services = self.services_manager.get_seedable_services()
+    self.seeder.unseed(services)
 
   @sleepy_exit
   @safe_exit
@@ -29,6 +36,45 @@ class Functions():
     pass
 
 
+class Seeder:
+  def __init__(self):
+    self.reload_settings()
+
+  def _generate_uids(self, amount):
+    return [uuid.uuid4().hex for _ in range(amount)]
+
+  def reload_settings(self):
+    self.settings = load_settings()
+
+  def seed(self, services: List[SeedableService]):
+    self.reload_settings()
+
+    generator = Generator(self.settings)
+    number_of_users_to_seed = self.settings.seeding.number_of_users_to_seed
+    uids = self._generate_uids(number_of_users_to_seed)
+
+    print(f"Seeding {number_of_users_to_seed} users.")
+    print("")
+
+    for service in services:
+      with alive_bar(number_of_users_to_seed, title=service.twenty_char_name() + ":", bar=CIRCLES_BAR) as bar:
+        service.seed(uids, generator, bar)
+
+    print("")
+    print("Successfully seeded to all services.")
+
+  def unseed(self, services: List[SeedableService]):
+    print("Unseeding users.")
+    print("")
+
+    for service in services:
+      with alive_bar(title=service.twenty_char_name() + ":", unknown=CIRCLES_BAR_SPINNER) as bar:
+        service.unseed(bar)
+
+    print("")
+    print("Successfully unseeded all services.")
+
+"""
 class FirebaseHandler():
     BATCH_SIZE = 500
     CREDENTIALS_FILENAME = 'serviceAccountKey.json'
@@ -152,3 +198,4 @@ def get_recommendations():
     print(json_response)
 
     input("Press Enter to go back... ")
+"""

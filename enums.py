@@ -8,4 +8,4 @@ class Platform(Enum):
 class RunMode(Enum):
   PRODUCTION = "Production"
   EMULATOR = "Emulator"
-  UNKNOWN = "Unknown"
+  INCONSISTENT = "Inconsistent"
