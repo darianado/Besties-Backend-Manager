@@ -1,7 +1,9 @@
 {
   "seeding": {
-    "number_of_users_to_seed": 2,
+    "number_of_users_to_seed": 4,
     "profile_image_folder": "assets/images/",
+    "password": "Password123",
+    "email_verified": true,
     "age_span": {
       "from": {
         "year": 1997,

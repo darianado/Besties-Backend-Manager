@@ -1,13 +1,14 @@
+import time
 from consolemenu import *
 from consolemenu.format import *
 from consolemenu.items import *
 
 from constants import (APPLICATION_DESCRIPTION, APPLICATION_NAME,
                        EPILOGUE_TEXT, SETTINGS_FILENAME)
+from decorators import safe_exit, sleepy_exit
 from environment_analyzer import EnvironmentAnalyzer
 from functions import Functions
 from utils import load_settings
-
 
 def main():
   environment_analyzer = EnvironmentAnalyzer()
@@ -61,6 +62,5 @@ def generate_menu(environment_analyzer: EnvironmentAnalyzer):
                      .set_border_style_type(MenuBorderStyleType.DOUBLE_LINE_BORDER)
                      .show_prologue_top_border(True)
                      .show_prologue_bottom_border(True))
-
 
 main()
