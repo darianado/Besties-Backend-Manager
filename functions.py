@@ -6,6 +6,29 @@ import firebase_admin
 from firebase_admin import credentials, firestore, storage
 import requests
 
+from seeder import Seeder
+
+
+class Functions():
+  def __init__(self, settings):
+    self.seeder = Seeder(settings)
+
+  @sleepy_exit
+  @safe_exit
+  def seed(self):
+    self.seeder.seed()
+
+  @sleepy_exit
+  @safe_exit
+  def unseed(self):
+    self.seeder.unseed()
+
+  @sleepy_exit
+  @safe_exit
+  def get_recommendations(self):
+    pass
+
+
 class FirebaseHandler():
     BATCH_SIZE = 500
     CREDENTIALS_FILENAME = 'serviceAccountKey.json'

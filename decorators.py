@@ -1,5 +1,7 @@
 import time
 
+from constants import SLEEPY_EXIT_DURATION
+
 def sleepy_exit(function):
     def sleeping(seconds: float):
         partitions = 3
@@ -11,7 +13,7 @@ def sleepy_exit(function):
 
     def sleepy_function():
         function()
-        time.sleep(3)
+        time.sleep(SLEEPY_EXIT_DURATION)
         
     return sleepy_function
 
