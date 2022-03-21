@@ -1,11 +1,15 @@
 import os
 import platform
+
 from colors import color
 
-from constants import FIREBASE_AUTH_EMULATOR_ENV_VAR, FIREBASE_AUTH_EMULATOR_ENV_VAR_VALUE, FIREBASE_FIRESTORE_EMULATOR_ENV_VAR, FIREBASE_FIRESTORE_EMULATOR_ENV_VAR_VALUE
+from constants import (FIREBASE_AUTH_EMULATOR_ENV_VAR,
+                       FIREBASE_AUTH_EMULATOR_ENV_VAR_VALUE,
+                       FIREBASE_FIRESTORE_EMULATOR_ENV_VAR,
+                       FIREBASE_FIRESTORE_EMULATOR_ENV_VAR_VALUE)
 from enums import Platform, RunMode
-from utils import initialize_firebase, update_settings_field
-from utils import load_settings
+from utils import initialize_firebase, load_settings, update_settings_field
+
 
 class EnvironmentManager:
   def __init__(self):

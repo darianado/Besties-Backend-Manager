@@ -1,88 +1,98 @@
-import json
-import os, glob
+import glob
 import random
-import uuid, pytz
-import faker, datetime
 
-class Generator_old:
+import pytz
+from faker import Faker
+from firebase_admin import firestore
 
-    def __init__(self, settings):
-        file = json.load(open(settings))
-
-        self.fake = faker.Faker()
-
-        self.image_folder = file['image_folder']
-        self.number = file['number']
-        self.age_span = file['age_span']
-        self.genders = file['genders']
-        self.location_span = file['location_span']
-        self.categories = file['categories']
-        self.universities = file['universities']
-        self.relationshipStatuses = file['relationshipStatuses']
+from models import AgeSpan, CategorizedInterests, Category, Context
 
 
-        age_from = self.age_span['from']
-        age_to = self.age_span['to']
+class Generator:
 
-        self.age_from_date = datetime.datetime(age_from['year'], age_from['month'], age_from['day'], tzinfo=pytz.UTC)
-        self.age_to_date = datetime.datetime(age_to['year'], age_to['month'], age_to['day'], tzinfo=pytz.UTC)
+  def __init__(self, settings):
+    self.db = firestore.client()
+    self.faker = Faker()
+    self.settings = settings
+    self.context = self._read_context(settings)
 
-    def _pick_dob(self):
-      return self.fake.date_time_between(start_date=self.age_from_date, end_date=self.age_to_date, tzinfo=pytz.UTC)
+  def _read_context(self, settings):
+    context = settings["seeding"]["context"]
 
-    def _pick_location(self):
-      return {
-        "lat": random.uniform(self.location_span['lat0'], self.location_span['lat1']),
-        "lon": random.uniform(self.location_span['lon0'], self.location_span['lon1'])
+    age_span = AgeSpan.from_dict(context["age_span"])
+    genders = context["genders"]
+    relationship_statuses = context["relationship_statuses"]
+    categorized_interests = CategorizedInterests.from_list(context["categorized_interests"])
+    universities = context["universities"]
+
+    return Context(age_span=age_span,
+                   genders=genders,
+                   categorized_interests=categorized_interests,
+                   universities=universities,
+                   relationship_statuses=relationship_statuses)
+
+  def pick_dob(self):
+    from_date = self.context.age_span.from_date
+    to_date = self.context.age_span.to_date
+
+    return self.faker.date_time_between(start_date=from_date, end_date=to_date, tzinfo=pytz.UTC)
+
+  def pick_gender(self):
+    genders = self.context.genders
+    return genders[random.randint(0, len(genders) - 1)]
+
+  def pick_relationship_status(self):
+    relationship_statuses = self.context.relationship_statuses
+    return relationship_statuses[random.randint(0, len(relationship_statuses) - 1)]
+
+  def pick_university(self):
+    universities = self.context.universities
+    return universities[random.randint(0, len(universities) - 1)]
+
+  def pick_interests(self):
+    categories = self.context.categorized_interests.categories
+    number_to_pick = random.randint(self.settings["seeding"]["min_interests_to_pick"], self.settings["seeding"]["max_interests_to_pick"])
+
+    picked_categories = []
+
+    for (i, category) in enumerate(categories):
+
+      if not i == len(categories) - 1:
+        number_to_pick_from_this_category = random.randint(0, number_to_pick)
+        number_to_pick -= number_to_pick_from_this_category
+      else:
+        number_to_pick_from_this_category = number_to_pick
+
+      picked_interests = random.sample(category.interests, k=min(number_to_pick_from_this_category, len(category.interests)))
+      picked_categories.append(Category(category.title, interests=picked_interests))
+
+    return CategorizedInterests(picked_categories)
+
+
+  def pick_photo(self):
+    files = glob.glob(self.settings["seeding"]["profile_image_folder"] + "*.jpg")
+    return random.choice(files)
+
+  def pick_unique_email(self):
+    return self.faker.unique.email()
+
+  def generate_bio(self):
+    max_bio_length = self.settings["seeding"]["max_bio_length"]
+    return self.faker.text(max_nb_chars=max_bio_length)
+
+  def generate_user_data(self):
+    return {
+      "bio": self.generate_bio(),
+      "dob": self.pick_dob(),
+      "firstName": self.faker.first_name(),
+      "lastName": self.faker.last_name(),
+      "gender": self.pick_gender(),
+      "relationshipStatus": self.pick_relationship_status(),
+      "university": self.pick_university(),
+      "categorizedInterests": self.pick_interests().to_list(),
+      "preferences": {
+        "categorizedInterests": self.pick_interests().to_list(),
+        "maxAge": 50,
+        "minAge": 18
       }
-
-    def _pick_gender(self):
-        return self.genders[random.randint(0, len(self.genders) - 1)]
-
-    def _pick_relationship_status(self):
-      return self.relationshipStatuses[random.randint(0, len(self.relationshipStatuses) - 1)]
-
-    def _pick_interests(self):
-        picked = []
-        for category in self.categories:
-            values = self.categories[category]
-
-            number_to_pick = random.randint(0, len(values) - 1)
-            picked += random.sample(values, k=number_to_pick)
-        return picked
-
-
-    def _pick_photos(self):
-      files = glob.glob(self.image_folder + "*.jpg")
-      return [random.choice(files)]
-
-    def _pick_university(self):
-      index = random.randint(0, len(self.universities) - 1)
-      return self.universities[index]
-
-
-    def generate_user(self):
-      return {
-        "uid": uuid.uuid4().hex,
-        "images": self._pick_photos(),
-        "firstName": self.fake.first_name(),
-        "lastName": self.fake.last_name(),
-        "dob": self._pick_dob(),
-        "gender": self._pick_gender(),
-        "location": self._pick_location(),
-        "interests": self._pick_interests(),
-        "university": self._pick_university(),
-        "bio": self.fake.paragraph(nb_sentences=2),
-        "relationshipStatus": self._pick_relationship_status(),
-        "preferences": {
-          "interests": self._pick_interests(),
-          "maxAge": self.age_to_date,
-          "minAge": self.age_from_date
-        }
-      }
-
-    def generate(self):
-        users = []
-        for _ in range(self.number):
-            users.append(self.generate_user())
-        return users
+    }

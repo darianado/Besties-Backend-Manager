@@ -1,8 +1,10 @@
 import json
 
-from constants import FIREBASE_CREDENTIALS_FILE, FIREBASE_STORAGE_BUCKET, SETTINGS_FILENAME
 import firebase_admin
 from firebase_admin import credentials
+
+from constants import (FIREBASE_CREDENTIALS_FILE, FIREBASE_STORAGE_BUCKET,
+                       SETTINGS_FILENAME)
 
 
 def load_settings():

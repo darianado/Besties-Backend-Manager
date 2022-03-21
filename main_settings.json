@@ -1,7 +1,0 @@
-{
-  "emulator_mode": true,
-  "emulator_ports": {
-    "firestore": 8080,
-    "storage": 9199
-  }
-}

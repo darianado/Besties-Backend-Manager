@@ -1,6 +1,6 @@
-import subprocess
+import os
 import sys
-import time, os
+
 from consolemenu import *
 from consolemenu.format import *
 from consolemenu.items import *
@@ -10,7 +10,7 @@ from constants import (APPLICATION_DESCRIPTION, APPLICATION_NAME,
 from environment_manager import EnvironmentManager
 from functions import Functions
 from services.services_manager import ServicesManager
-from utils import load_settings, update_settings_field
+
 
 class Runner:
 
