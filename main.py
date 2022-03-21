@@ -17,7 +17,7 @@ class Runner:
   def __init__(self):
     self.environment_manager = EnvironmentManager()
     self.services_manager = ServicesManager(self.environment_manager)
-    self.functions = Functions(self.services_manager)
+    self.functions = Functions(self.environment_manager, self.services_manager)
 
     self.show_menu(self.environment_manager, self.functions)
 
