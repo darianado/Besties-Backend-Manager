@@ -26,7 +26,7 @@ class EnvironmentManager:
       return platform_type
 
   def _configure_run_mode(self):
-    if(self.settings.emulator_run_mode):
+    if(self.settings["emulator_run_mode"]):
       return RunMode.EMULATOR
     else:
       return RunMode.PRODUCTION

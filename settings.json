@@ -1,87 +1,162 @@
 {
-    "emulator_run_mode": true,
+    "emulator_run_mode": false,
     "seeding": {
-        "number_of_users_to_seed": 100,
-        "firestore_users_collection_path": "users", 
+        "number_of_users_to_seed": 10,
+        "firestore_users_collection_path": "users",
+        "storage_profile_image_folder": "profile_pictures",
         "profile_image_folder": "assets/images/",
-        "password": "Password123",
-        "email_verified": true,
-        "age_span": {
-            "from": {
-                "year": 1997,
-                "month": 2,
-                "day": 10
+        "min_interests_to_pick": 1,
+        "max_interests_to_pick": 10,
+        "max_bio_length": 280,
+        "context": {
+            "password": "Password123",
+            "email_verified": true,
+            "age_span": {
+                "from": {
+                    "year": 1997,
+                    "month": 2,
+                    "day": 10
+                },
+                "to": {
+                    "year": 2000,
+                    "month": 2,
+                    "day": 10
+                }
             },
-            "to": {
-                "year": 2000,
-                "month": 2,
-                "day": 10
-            }
-        },
-        "use_global_context": false,
-        "global_context_doc_path": "app/context",
-        "local_context": {
             "genders": [
-                "male",
-                "female",
-                "non-binary"
+                "Male",
+                "Female",
+                "Non-binary"
             ],
             "relationship_statuses": [
-                "single",
-                "taken",
-                "complicated"
-            ],
-            "categorized_interests": [
-                {
-                    "title": "sports",
-                    "entries": [
-                        "running",
-                        "biking",
-                        "surfing"
-                    ]
-                },
-                {
-                    "title": "hobbies",
-                    "entries": [
-                        "reading",
-                        "volunteering",
-                        "baking"
-                    ]
-                },
-                {
-                    "title": "foods_drinks",
-                    "entries": [
-                        "tea",
-                        "coffee",
-                        "pizza",
-                        "burgers"
-                    ]
-                },
-                {
-                    "title": "religion",
-                    "entries": [
-                        "christian",
-                        "islam",
-                        "hinduism",
-                        "buddhism"
-                    ]
-                },
-                {
-                    "title": "sports",
-                    "entries": [
-                        "running",
-                        "biking",
-                        "surfing"
-                    ]
-                }
+                "Single",
+                "In a relationship",
+                "It's complicated",
+                "Engaged",
+                "Married"
             ],
             "universities": [
                 "King's College London",
-                "University College London",
-                "University of Oxford",
-                "University of Cambridge",
-                "Queen Mary University of London",
-                "Manchester University"
+                "St Mary's University, Twickenham",
+                "University of Greenwich",
+                "University of Roehampton",
+                "City, University of London",
+                "Imperial College London",
+                "London Metropolitan University"
+            ],
+            "categorized_interests": [
+                {
+                    "title": "Arts and Literature",
+                    "entries": [
+                        "Drawing",
+                        "Painting",
+                        "Poetry",
+                        "Novels",
+                        "Photography",
+                        "Theatre",
+                        "Opera",
+                        "Musicals",
+                        "Classical music",
+                        "Jazz"
+                    ]
+                },
+                {
+                    "title": "Food",
+                    "entries": [
+                        "Baking",
+                        "Eating out",
+                        "Cooking",
+                        "Sweets",
+                        "Vegetarian",
+                        "Vegan",
+                        "Coffee",
+                        "Brunch",
+                        "Cocktails"
+                    ]
+                },
+                {
+                    "title": "Games",
+                    "entries": [
+                        "Video games",
+                        "Card games",
+                        "Board games",
+                        "Poker",
+                        "Esports",
+                        "Trivia"
+                    ]
+                },
+                {
+                    "title": "Popular culture",
+                    "entries": [
+                        "Movies",
+                        "TV series",
+                        "Reality shows",
+                        "Music",
+                        "Stand-up comedy",
+                        "Comedy movies",
+                        "Horror movies",
+                        "Drama",
+                        "Music events"
+                    ]
+                },
+                {
+                    "title": "Science and Technology",
+                    "entries": [
+                        "AI and robotics",
+                        "Development",
+                        "Gadgets",
+                        "Science",
+                        "Mathematics",
+                        "Engineering",
+                        "Astrophysics",
+                        "Astrology",
+                        "Medicine",
+                        "Biology",
+                        "Chemistry",
+                        "Investment"
+                    ]
+                },
+                {
+                    "title": "Self care",
+                    "entries": [
+                        "Make-up",
+                        "Shopping",
+                        "Fashion",
+                        "Skin routine",
+                        "Jewellery",
+                        "Working out",
+                        "Meditation",
+                        "Yoga"
+                    ]
+                },
+                {
+                    "title": "Social activities",
+                    "entries": [
+                        "Clubbing",
+                        "Travel",
+                        "Charity",
+                        "Dating",
+                        "Social media",
+                        "Pub quizzes",
+                        "Picnicking",
+                        "Pub crawl"
+                    ]
+                },
+                {
+                    "title": "Sports",
+                    "entries": [
+                        "Outdoor activities",
+                        "Hiking",
+                        "Swimming",
+                        "Football",
+                        "Gym",
+                        "Tennis",
+                        "Volleyball",
+                        "Rugby",
+                        "Skiing",
+                        "Dancing"
+                    ]
+                }
             ]
         }
     },

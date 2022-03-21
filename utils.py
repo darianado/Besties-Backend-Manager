@@ -1,17 +1,13 @@
 import json
-import os
-import platform
-from types import SimpleNamespace
 
 from constants import FIREBASE_CREDENTIALS_FILE, FIREBASE_STORAGE_BUCKET, SETTINGS_FILENAME
-from enums import Platform, RunMode
 import firebase_admin
-from firebase_admin import credentials, firestore, storage
+from firebase_admin import credentials
 
 
 def load_settings():
   try:
-    return json.load(open(SETTINGS_FILENAME), object_hook=lambda d: SimpleNamespace(**d))
+    return json.load(open(SETTINGS_FILENAME))
   except:
     print(f"""ERROR: Could not load settings file. 
           Please check that a file by the name \'{SETTINGS_FILENAME}\' exists, 

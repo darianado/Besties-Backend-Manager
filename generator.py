@@ -4,7 +4,7 @@ import random
 import uuid, pytz
 import faker, datetime
 
-class Generator():
+class Generator_old:
 
     def __init__(self, settings):
         file = json.load(open(settings))

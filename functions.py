@@ -1,3 +1,4 @@
+from faulthandler import disable
 import time
 import json, os, uuid
 from typing import List
@@ -50,7 +51,7 @@ class Seeder:
     self.reload_settings()
 
     generator = Generator(self.settings)
-    number_of_users_to_seed = self.settings.seeding.number_of_users_to_seed
+    number_of_users_to_seed = self.settings["seeding"]["number_of_users_to_seed"]
     uids = self._generate_uids(number_of_users_to_seed)
 
     print(f"Seeding {number_of_users_to_seed} users.")
@@ -68,7 +69,7 @@ class Seeder:
     print("")
 
     for service in services:
-      with alive_bar(title=service.twenty_char_name() + ":", unknown=CIRCLES_BAR_SPINNER) as bar:
+      with alive_bar(title=service.twenty_char_name() + ":", bar=CIRCLES_BAR, unknown=CIRCLES_BAR_SPINNER) as bar:
         service.unseed(bar)
 
     print("")
