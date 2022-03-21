@@ -31,7 +31,7 @@ class StorageService(SeedableService):
 
     for uid in uids:
       local_file_path = generator.pick_photo()
-      blob = self.bucket.blob(storage_profile_image_folder + uid + ".jpg")
+      blob = self.bucket.blob(storage_profile_image_folder + "/" + uid + ".jpg")
       blob.content_type = "image/jpeg"
 
       with open(local_file_path, "rb") as file:

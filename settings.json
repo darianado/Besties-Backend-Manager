@@ -1,7 +1,7 @@
 {
     "emulator_run_mode": false,
     "seeding": {
-        "number_of_users_to_seed": 10,
+        "number_of_users_to_seed": 20,
         "firestore_users_collection_path": "users",
         "storage_profile_image_folder": "profile_pictures",
         "profile_image_folder": "assets/images/",
