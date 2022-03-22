@@ -1,5 +1,5 @@
 {
-    "emulator_run_mode": true,
+    "emulator_run_mode": false,
     "seeding": {
         "number_of_users_to_seed": 10,
         "firestore_users_collection_path": "users",
@@ -164,5 +164,9 @@
         "emulator_rec_url": "http://localhost:5001/seg-djangoals/europe-west2/requestRecommendationsHTTP",
         "production_rec_url": "https://europe-west2-seg-djangoals.cloudfunctions.net/requestRecommendations",
         "number_of_recommendations_to_request": 1
+    },
+    "matching": {
+        "emulator_url": "https://europe-west2-seg-djangoals.cloudfunctions.net/requestRecommendations",
+        "production_url": "https://europe-west2-seg-djangoals.cloudfunctions.net/requestRecommendations"
     }
 }

@@ -17,6 +17,7 @@ import requests, json, time
 class Functions():
   def __init__(self, environment_manager: EnvironmentManager, services_manager: ServicesManager):
     self.services_manager = services_manager
+    self.matching_handler = MatchingHandler(environment_manager)
     self.recommendation_handler = RecommendationHandler(environment_manager)
     self.seeder = Seeder()
     self.environment_manager = environment_manager
@@ -37,6 +38,41 @@ class Functions():
   def get_recommendations(self):
     self.recommendation_handler.get_recommendations()
 
+  @safe_exit
+  def like_user(self):
+    self.matching_handler.like_user()
+
+class MatchingHandler:
+  def __init__(self, environment_manager: EnvironmentManager):
+    self.environment_manager = environment_manager
+    self.reload_settings()
+
+  def reload_settings(self):
+    self.settings = load_settings()
+
+  def like_user(self):
+    self.reload_settings()
+
+    run_mode = self.environment_manager.run_mode
+    matching_settings = self.settings["matching"]
+    url = matching_settings["emulator_url"] if run_mode == RunMode.EMULATOR else matching_settings["production_url"]
+    print(url)
+
+    payload = {
+      "likerUserID": input("Type the user ID of the person liking: "),
+      "likeeUserID": input("Type the user ID of the person being liked: ")
+    }
+
+    start_time = time.time()
+    response = requests.post(url, json=payload)
+    unwrapped_response = json.loads(response.text)
+
+    print("\nReceived the following in %.2f seconds:\n" % (time.time() - start_time))
+    print(unwrapped_response)
+    print("")
+
+    input("Press enter to go back... ")
+
 class RecommendationHandler:
   def __init__(self, environment_manager: EnvironmentManager):
     self.environment_manager = environment_manager
@@ -51,7 +87,6 @@ class RecommendationHandler:
     run_mode = self.environment_manager.run_mode
     recommendation_settings = self.settings["recommendations"]
     rec_url = recommendation_settings["emulator_rec_url"] if run_mode == RunMode.EMULATOR else recommendation_settings["production_rec_url"]
-    print("Rec_url: ", rec_url)
 
     payload = {
       "uid": input("Type a user ID: "),

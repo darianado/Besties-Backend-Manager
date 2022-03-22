@@ -30,6 +30,7 @@ class Runner:
     main_menu = self._generate_menu(environment_manager)
     seed_menu = self._generate_menu(environment_manager)
     recommendations_menu = self._generate_menu(environment_manager)
+    matching_menu = self._generate_menu(environment_manager)
 
     # Define items
     settings_item = CommandItem("Open settings in VSCode", environment_manager.get_command_for_opening_file_in_environment(SETTINGS_FILENAME))
@@ -39,6 +40,8 @@ class Runner:
     env_item = FunctionItem("Switch run mode", self.switch_run_mode, should_exit=True)
 
     recommendation_item = FunctionItem("Get Recommendations", functions.get_recommendations)
+
+    like_user_item = FunctionItem("Like a user", functions.like_user)
 
     # Populate menus
     seed_menu.append_item(settings_item)
@@ -50,8 +53,12 @@ class Runner:
     recommendations_menu.append_item(recommendation_item)
     recommendations_submenu = SubmenuItem("Recommendations", recommendations_menu, main_menu)
 
+    matching_menu.append_item(like_user_item)
+    matching_submenu = SubmenuItem("Matching", matching_menu, main_menu)
+
     main_menu.append_item(seed_submenu)
     main_menu.append_item(recommendations_submenu)
+    main_menu.append_item(matching_submenu)
     main_menu.append_item(env_item)
 
     # Show menu.
