@@ -26,6 +26,8 @@ class EnvironmentManager:
       return Platform.WINDOWS
     elif(platform_type == "Darwin"):
       return Platform.MACOS
+    elif(platform_type == "linux"):
+      return Platform.LINUX
     else:
       return platform_type
 
@@ -36,7 +38,7 @@ class EnvironmentManager:
       return RunMode.PRODUCTION
 
   def _get_os_environment_description(self):
-    if(self.platform_type == Platform.WINDOWS or self.platform_type == Platform.MACOS):
+    if(self.platform_type == Platform.WINDOWS or self.platform_type == Platform.MACOS or self.platform_type == Platform.LINUX):
       return color("[✔]", fg="green") + f" {self.platform_type.value} is supported."
     else:
       return color("[✘]", fg="red") + f" {self.platform_type} is not supported."
@@ -64,6 +66,8 @@ class EnvironmentManager:
       return f"code {filename}"
     elif(self.platform_type == Platform.MACOS):
       return f"open -a 'Visual Studio Code.app' {filename}"
+    elif(self.platform_type == Platform.LINUX):
+      return f"gedit {filename}"
     else:
       return f"open {filename}"
 
