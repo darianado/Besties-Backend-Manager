@@ -166,7 +166,7 @@
         "number_of_recommendations_to_request": 2
     },
     "matching": {
-        "emulator_url": "https://europe-west2-seg-djangoals.cloudfunctions.net/requestRecommendations",
-        "production_url": "https://europe-west2-seg-djangoals.cloudfunctions.net/requestRecommendations"
+        "emulator_url": "http://localhost:5001/seg-djangoals/europe-west2/likeUserHTTP",
+        "production_url": "https://europe-west2-seg-djangoals.cloudfunctions.net/likeUserHTTP"
     }
 }

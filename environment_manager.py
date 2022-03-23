@@ -26,7 +26,7 @@ class EnvironmentManager:
       return Platform.WINDOWS
     elif(platform_type == "Darwin"):
       return Platform.MACOS
-    elif(platform_type == "linux"):
+    elif(platform_type == "Linux"):
       return Platform.LINUX
     else:
       return platform_type

@@ -60,7 +60,7 @@ class MatchingHandler:
 
     payload = {
       "likerUserID": input("Type the user ID of the person liking: "),
-      "likeeUserID": input("Type the user ID of the person being liked: ")
+      "otherUserID": input("Type the user ID of the person being liked: ")
     }
 
     start_time = time.time()

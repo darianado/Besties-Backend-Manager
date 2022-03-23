@@ -81,17 +81,20 @@ class Generator:
     return self.faker.text(max_nb_chars=max_bio_length)
 
   def generate_user_data(self):
+    own_gender = self.pick_gender()
+
     return {
       "bio": self.generate_bio(),
       "dob": self.pick_dob(),
       "firstName": self.faker.first_name(),
       "lastName": self.faker.last_name(),
-      "gender": self.pick_gender(),
+      "gender": own_gender,
       "relationshipStatus": self.pick_relationship_status(),
       "university": self.pick_university(),
       "categorizedInterests": self.pick_interests().to_list(),
       "preferences": {
         "categorizedInterests": self.pick_interests().to_list(),
+        "genders": [own_gender],
         "maxAge": 50,
         "minAge": 18
       }
