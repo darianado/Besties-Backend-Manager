@@ -23,7 +23,7 @@ class Runner:
 
   def switch_run_mode(self):
     self.environment_manager.switch_run_mode()
-    os.execl(sys.executable, '"{}"'.format(sys.executable), *sys.argv)  # To hard-restart this app
+    os.execl(sys.executable, sys.executable, *sys.argv)  # To hard-restart this app
 
   def show_menu(self, environment_manager: EnvironmentManager, functions: Functions):
     # Define menus
