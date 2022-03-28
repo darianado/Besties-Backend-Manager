@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
       "Djangoals",
+      "firestore",
+      "gedit",
       "pytz",
+      "uids",
       "unseed"
     ],
     "python.formatting.provider": "autopep8"

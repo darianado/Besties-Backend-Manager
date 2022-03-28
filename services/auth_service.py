@@ -19,6 +19,15 @@ class AuthService(SeedableService):
   def name(cls):
     return "Authentication"
 
+  def can_seed(self):
+    return True
+
+  def can_unseed(self):
+    return self.settings["seeding"]["auth_should_unseed"]
+
+  def amount_to_seed(self, uids: List[str]) -> int:
+    return len(uids)
+
   def seed(self, uids: List[str], generator: Generator, progress_callback):
     super().seed(uids, generator, progress_callback)
 

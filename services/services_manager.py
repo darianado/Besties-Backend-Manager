@@ -21,7 +21,7 @@ class ServicesManager:
 
   def _initialize_services(self, settings):
     self.services.append(AuthService(settings))
-    self.services.append(FirestoreService(settings))
+    self.services.append(FirestoreService(settings, self.environment_manager))
     self.services.append(StorageService(settings))
 
   def _get_active_services(self):
@@ -33,12 +33,21 @@ class ServicesManager:
 
     return result
 
-  def get_seedable_services(self) -> List[Seedable]:
+  def get_seeding_services(self) -> List[Seedable]:
     active = self._get_active_services()
     result = []
 
     for service in active:
-      if issubclass(type(service), Seedable): result.append(service)
+      if issubclass(type(service), Seedable) and service.can_seed(): result.append(service)
+
+    return result
+
+  def get_unseeding_services(self) -> List[Seedable]:
+    active = self._get_active_services()
+    result = []
+
+    for service in active:
+      if issubclass(type(service), Seedable) and service.can_unseed(): result.append(service)
 
     return result
 

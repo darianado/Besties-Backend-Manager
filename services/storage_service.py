@@ -20,6 +20,15 @@ class StorageService(SeedableService):
   def name(cls):
     return "Storage"
 
+  def can_seed(self):
+    return True
+
+  def can_unseed(self):
+    return self.settings["seeding"]["storage_should_unseed"]
+
+  def amount_to_seed(self, uids: List[str]) -> int:
+    return len(uids)
+
   def _save_url_to_user(self, uid, url):
     users_collection_ref = self.settings["seeding"]["firestore_users_collection_path"]
     firestore.client().collection(users_collection_ref).document(uid).set({

@@ -30,6 +30,16 @@ class Seedable(ABC):
   def unseed(self, progress_callback) -> List[str]:
     pass
 
+  def can_seed(self):
+    return True
+
+  def can_unseed(self):
+    return True
+
+  @abstractmethod
+  def amount_to_seed(self, uids: List[str]) -> int:
+    pass
+
 
 class SeedableService(Service, Seedable):
   pass
