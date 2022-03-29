@@ -1,3 +1,4 @@
+from datetime import datetime
 import glob
 import random
 
@@ -93,6 +94,10 @@ class Generator:
     max_bio_length = self.settings["seeding"]["max_bio_length"]
     return self.faker.text(max_nb_chars=max_bio_length)
 
+  def _generate_message_content(self):
+    """Generates and returns a message that one user could send to another."""
+    return self.faker.text(max_nb_chars=80)
+
   def generate_user_data(self):
     """Creates and returns a dictionary of all information required to seed a single user."""
     own_gender = self.pick_gender()
@@ -112,4 +117,11 @@ class Generator:
         "maxAge": 50,
         "minAge": 18
       }
+    }
+
+  def generate_message(self, senderID: str):
+    return {
+      "content": self._generate_message_content(),
+      "senderID": senderID,
+      "timestamp": datetime.utcnow()
     }

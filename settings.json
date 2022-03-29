@@ -1,5 +1,5 @@
 {
-    "emulator_run_mode": false,
+    "emulator_run_mode": true,
     "seeding": {
         "auth_should_unseed": true,
         "firestore_should_unseed": false,
@@ -13,7 +13,8 @@
             }
         ],
         "firestore_users_collection_path": "users",
-        "firestore_matches_collection_path": "matches",
+        "firestore_match_collection_path": "matches",
+        "firestore_match_messages_collection_path": "messages",
         "storage_profile_image_folder": "profile_pictures",
         "profile_image_folder": "assets/images/",
         "min_interests_to_pick": 1,

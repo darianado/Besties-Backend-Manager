@@ -10,7 +10,7 @@ from constants import (FIREBASE_CREDENTIALS_FILE, FIREBASE_STORAGE_BUCKET,
                        SETTINGS_FILENAME)
 
 
-def pick_random_pairs(self, n: int, lst: List):
+def pick_random_pairs(n: int, lst: List):
   """Picks n number of random pairs from the supplied list. Each pair contains two distinct elements."""
   result = []
 
@@ -19,6 +19,10 @@ def pick_random_pairs(self, n: int, lst: List):
     n -= 1
 
   return result
+
+def pick_random_from(list):
+  """Picks a random element from the list."""
+  return list[random.randint(0, len(list) - 1)]
 
 def load_settings():
   """Loads the settings file. Will raise a FileNotFoundError if the file cannot be found."""
