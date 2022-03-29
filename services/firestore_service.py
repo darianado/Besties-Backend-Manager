@@ -82,7 +82,7 @@ class FirestoreService(SeedableService):
     return uids
 
 
-  def seed(self, uids: List[str], generator: Generator, progress_callback) -> List[str]:
+  def seed(self, uids: List[str], required_accounts, generator: Generator, progress_callback) -> List[str]:
     uids = self._seed_users(uids, generator, progress_callback)
     return self._seed_matches(uids, progress_callback)
 

@@ -16,12 +16,12 @@ def load_settings():
           Please check that a file by the name \'{SETTINGS_FILENAME}\' exists, 
           and contains properly formatted json.""")
 
-# https://stackoverflow.com/questions/21035762/python-read-json-file-and-modify
+
 def update_settings_field(field: str, value):
   with open(SETTINGS_FILENAME, 'r+') as f:
     data = json.load(f)
-    data[field] = value # <--- add `id` value.
-    f.seek(0)        # <--- should reset file position to the beginning.
+    data[field] = value
+    f.seek(0)
     json.dump(data, f, indent=4)
     f.truncate()
 

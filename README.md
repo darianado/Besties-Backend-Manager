@@ -23,6 +23,9 @@ This application provides an interface to interact with the backend directly for
 **This application is intended to work on macOS and Linux only.** 
 
 In order to use this application, you must setup credentials on your machine and install dependencies. Follow this guide:
+
+> Steps 1 through 3 can be omitted for markers of the SEG group project, as the submission code already contains a copy of the *'serviceAccountKey.json'* file.
+
 1. Open this [link](https://console.firebase.google.com/project/seg-djangoals/settings/serviceaccounts/adminsdk).
 2. Click the button called *Generate new private key*, and then click *Generate key* to download a .json file. **Do NOT share this file with anyone else as it contains confidential information - everyone in the project should make their own file.**
 3. Rename the downloaded file to '*serviceAccountKey.json*' and put it in the same directory as '*main.py*'.
@@ -38,6 +41,8 @@ To start the application, follow this guide:
 3. Run the command `python3 main.py`.
 
 The application has an easy to use menu interface, which makes it easy to navigate and use.
+
+> **Please note: This application can be used in *Production* or *Emulator* mode. In production mode, any actions you apply using this tool will affect the deployed production environment. In emulator mode, you must run the Firebase Emulator environment (see [this link](https://github.com/nikolajjensen/seg-backend) for guidance).**
 
 ## Sources
 * Code for loading and manipulating json files (`update_settings_field()` in '*utils.py*') has been inspired by [this](https://stackoverflow.com/a/21035861) code snippet written by Stack Overflow user '*falsetru*'.

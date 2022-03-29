@@ -28,10 +28,28 @@ class AuthService(SeedableService):
   def amount_to_seed(self, uids: List[str]) -> int:
     return len(uids)
 
-  def seed(self, uids: List[str], generator: Generator, progress_callback):
-    super().seed(uids, generator, progress_callback)
+  def seed(self, uids: List[str], required_accounts, generator: Generator, progress_callback):
+    super().seed(uids, generator, required_accounts, progress_callback)
 
-    for uid in uids:
+
+    number_of_required_accounts = len(required_accounts)
+    required_accounts_uids = uids[:number_of_required_accounts]
+    random_accounts_uids = uids[number_of_required_accounts:]
+
+    for required_account in required_accounts:
+      uid = required_accounts_uids.pop()
+      email = required_account["email"]
+      password = required_account["password"]
+
+      auth.create_user(
+        uid=uid,
+        email=email,
+        email_verified=self.settings["seeding"]["context"]["email_verified"],
+        password=password)
+
+      progress_callback()
+
+    for uid in random_accounts_uids:
       auth.create_user(
         uid=uid,
         email=generator.pick_unique_email(),

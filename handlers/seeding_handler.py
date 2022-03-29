@@ -23,16 +23,17 @@ class SeedingHandler:
     self.reload_settings()
 
     generator = Generator(self.settings)
-    number_of_users_to_seed = self.settings["seeding"]["number_of_users_to_seed"]
-    uids = self._generate_uids(number_of_users_to_seed)
+    number_of_random_users_to_seed = self.settings["seeding"]["number_of_random_users_to_seed"]
+    required_accounts = self.settings["seeding"]["required_accounts"]
+    uids = self._generate_uids(number_of_random_users_to_seed + len(required_accounts))
 
-    print(f"Seeding {number_of_users_to_seed} users.")
+    print(f"Seeding {len(uids)} users.")
     print("")
 
     for service in services:
       total = service.amount_to_seed(uids)
       with alive_bar(total, title=service.twenty_char_name() + ":", bar=CIRCLES_BAR) as bar:
-        service.seed(uids, generator, bar)
+        service.seed(uids, required_accounts, generator, bar)
 
     print("")
     print("Successfully seeded to all services.")

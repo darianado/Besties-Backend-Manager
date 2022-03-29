@@ -23,7 +23,7 @@ class Service(ABC):
 
 class Seedable(ABC):
   @abstractmethod
-  def seed(self, uids: List[str], generator: Generator, progress_callback) -> List[str]:
+  def seed(self, uids: List[str], required_accounts, generator: Generator, progress_callback) -> List[str]:
     pass
 
   @abstractmethod

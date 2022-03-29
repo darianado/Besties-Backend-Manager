@@ -35,7 +35,7 @@ class StorageService(SeedableService):
       "profileImageUrl": url
     }, merge=True)
 
-  def seed(self, uids: List[str], generator: Generator, progress_callback) -> List[str]:
+  def seed(self, uids: List[str], required_accounts, generator: Generator, progress_callback) -> List[str]:
     storage_profile_image_folder = self.settings["seeding"]["storage_profile_image_folder"]
 
     for uid in uids:
