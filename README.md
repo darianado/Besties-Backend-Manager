@@ -1,6 +1,6 @@
-# besties-backend-manager
+# Besties backend manager
 
-**Application title:** Backend Manager Application
+**Application title:** Backend manager application
 
 **Authors:**
 * Nikolaj Banke Jense
@@ -42,7 +42,7 @@ To start the application, follow this guide:
 
 The application has an easy to use menu interface, which makes it easy to navigate and use.
 
-> **Please note: This application can be used in *Production* or *Emulator* mode. In production mode, any actions you apply using this tool will affect the deployed production environment. In emulator mode, you must run the Firebase Emulator environment (see [this link](https://github.com/nikolajjensen/seg-backend) for guidance).**
+> **Please note: This application can be used in *Production* or *Emulator* mode. In production mode, any actions you apply using this tool will affect the deployed production environment. In emulator mode, you must run the Firebase Emulator environment (see [this link](https://github.com/nikolajjensen/besties-backend) for guidance).**
 
 ## Sources
 * Code for loading and manipulating json files (`update_settings_field()` in '*utils.py*') has been inspired by [this](https://stackoverflow.com/a/21035861) code snippet written by Stack Overflow user '*falsetru*'.
