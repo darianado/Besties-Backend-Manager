@@ -11,6 +11,7 @@ from services.storage_service import StorageService
 
 
 class ServicesManager:
+  """Class that instantiates and serves various services to other classes in the application."""
 
   services: List[Service] = []
   
@@ -20,11 +21,13 @@ class ServicesManager:
     self._initialize_services(self.settings)
 
   def _initialize_services(self, settings):
+    """Creates instances of each available service and appends them to the 'services' list."""
     self.services.append(AuthService(settings))
     self.services.append(FirestoreService(settings, self.environment_manager))
     self.services.append(StorageService(settings))
 
   def _get_active_services(self):
+    """Returns all services that are active in the current RunMode."""
     run_mode = self.environment_manager.run_mode
     result = []
 
@@ -34,6 +37,7 @@ class ServicesManager:
     return result
 
   def get_seeding_services(self) -> List[Seedable]:
+    """Returns all services that can seed in the current environment."""
     active = self._get_active_services()
     result = []
 
@@ -43,6 +47,7 @@ class ServicesManager:
     return result
 
   def get_unseeding_services(self) -> List[Seedable]:
+    """Returns all services that can unseed in the current environment."""
     active = self._get_active_services()
     result = []
 
@@ -52,6 +57,7 @@ class ServicesManager:
     return result
 
   def get_available_features_description(self):
+    """Returns a humanized overview of available services."""
     run_mode = self.environment_manager.run_mode
     result = "Active services:\n"
 

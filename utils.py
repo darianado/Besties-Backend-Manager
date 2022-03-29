@@ -1,4 +1,7 @@
 import json
+import random
+from pathlib import Path
+from typing import List
 
 import firebase_admin
 from firebase_admin import credentials
@@ -6,7 +9,16 @@ from firebase_admin import credentials
 from constants import (FIREBASE_CREDENTIALS_FILE, FIREBASE_STORAGE_BUCKET,
                        SETTINGS_FILENAME)
 
-from pathlib import Path
+
+def pick_random_pairs(self, n: int, lst: List):
+  """Picks n number of random pairs from the supplied list. Each pair contains two distinct elements."""
+  result = []
+
+  while(n > 0):
+    result.append(random.sample(lst, 2))
+    n -= 1
+
+  return result
 
 def load_settings():
   """Loads the settings file. Will raise a FileNotFoundError if the file cannot be found."""

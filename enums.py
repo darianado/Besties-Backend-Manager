@@ -1,12 +1,13 @@
 from enum import Enum
 
 class Platform(Enum):
+  """Enum describing various platforms."""
   LINUX = "Linux"
-  WINDOWS = "Windows"
   MACOS = "macOS"
   UNSUPPORTED = "Unsupported"
 
 class RunMode(Enum):
+  """Enum describing possible run modes."""
   PRODUCTION = "Production"
   EMULATOR = "Emulator"
   INCONSISTENT = "Inconsistent"

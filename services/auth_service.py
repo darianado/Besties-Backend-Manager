@@ -8,29 +8,35 @@ from generator import Generator
 
 
 class AuthService(SeedableService):
+  """A SeedableService which seeds and unseeds Firebase Authentication user profiles."""
 
   def __init__(self, settings):
     self.settings = settings
 
   def is_active_in(cls, run_mode: RunMode) -> bool:
+    """Determines if the service is available in the current RunMode."""
     return (run_mode in AUTH_RUN_MODES)
 
   @classmethod
   def name(cls):
+    """Returns the humanized name of this service."""
     return "Authentication"
 
   def can_seed(self):
+    """Returns True if this class can seed."""
     return True
 
   def can_unseed(self):
+    """Returns True if this class can unseed."""
     return self.settings["seeding"]["auth_should_unseed"]
 
   def amount_to_seed(self, uids: List[str]) -> int:
+    """Amount of steps required when seeding."""
     return len(uids)
 
   def seed(self, uids: List[str], required_accounts, generator: Generator, progress_callback):
+    """Seeds randomized and required accounts to Firebase Authentication."""
     super().seed(uids, generator, required_accounts, progress_callback)
-
 
     number_of_required_accounts = len(required_accounts)
     required_accounts_uids = uids[:number_of_required_accounts]
@@ -59,6 +65,7 @@ class AuthService(SeedableService):
       progress_callback()
 
   def unseed(self, progress_callback):
+    """Unseeds all Firebase Authentication users."""
     super().unseed(progress_callback)
 
     for user in auth.list_users().iterate_all():
