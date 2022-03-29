@@ -13,6 +13,7 @@ from services.services_manager import ServicesManager
 
 
 class Runner:
+  """Utility class to help instantiate and run the application menu interface."""
 
   def __init__(self):
     self.environment_manager = EnvironmentManager()
@@ -22,10 +23,12 @@ class Runner:
     self.show_menu(self.environment_manager, self.functions)
 
   def switch_run_mode(self):
+    """Will change run-mode, and restart the application afterwards."""
     self.environment_manager.switch_run_mode()
     os.execl(sys.executable, sys.executable, *sys.argv)  # To hard-restart this app
 
   def show_menu(self, environment_manager: EnvironmentManager, functions: Functions):
+    """The main function of the app, responsible for constructing and showing the console menu."""
     # Define menus
     main_menu = self._generate_menu(environment_manager)
     seed_menu = self._generate_menu(environment_manager)
@@ -66,6 +69,7 @@ class Runner:
 
 
   def _create_prologue(self, environment_manager: EnvironmentManager):
+    """Utility function that builds and returns the prologue text for menus."""
     result = environment_manager.get_environment_description()
     result += "\n"
     result += self.services_manager.get_available_features_description()
@@ -73,15 +77,17 @@ class Runner:
 
 
   def _generate_menu(self, environment_manager: EnvironmentManager):
+    """Utility function that returns a standard menu to maintain consistency between 'screens'."""
     return ConsoleMenu(APPLICATION_NAME,
                       subtitle=APPLICATION_DESCRIPTION,
                       prologue_text=self._create_prologue(environment_manager),
                       epilogue_text=EPILOGUE_TEXT,
                       formatter=MenuFormatBuilder()
-                      .set_title_align('center')
-                      .set_subtitle_align('center')
-                      .set_border_style_type(MenuBorderStyleType.DOUBLE_LINE_BORDER)
-                      .show_prologue_top_border(True)
-                      .show_prologue_bottom_border(True))
+                        .set_title_align('center')
+                        .set_subtitle_align('center')
+                        .set_border_style_type(MenuBorderStyleType.DOUBLE_LINE_BORDER)
+                        .show_prologue_top_border(True)
+                        .show_prologue_bottom_border(True)
+                      )
 
 Runner()
