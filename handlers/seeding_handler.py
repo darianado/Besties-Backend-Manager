@@ -10,16 +10,22 @@ from utils import load_settings
 
 
 class SeedingHandler:
+  """Class that handles seeding and unseeding from various services, 
+  as well as showing progress bars in the console."""
+
   def __init__(self):
     self.reload_settings()
 
   def _generate_uids(self, amount):
+    """Generates and returns a number of random UUID v4 strings."""
     return [uuid.uuid4().hex for _ in range(amount)]
 
   def reload_settings(self):
+    """Reloads the settings file to get newest changes."""
     self.settings = load_settings()
 
   def seed(self, services: List[SeedableService]):
+    """Seeds all available services that can be seeded."""
     self.reload_settings()
 
     generator = Generator(self.settings)
@@ -39,6 +45,7 @@ class SeedingHandler:
     print("Successfully seeded to all services.")
 
   def unseed(self, services: List[SeedableService]):
+    """Unseeds all available services that can be unseeded."""
     print("Unseeding users.")
     print("")
 

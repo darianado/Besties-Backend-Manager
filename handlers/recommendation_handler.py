@@ -4,14 +4,20 @@ import requests, json, time
 from enums import RunMode
 
 class RecommendationHandler:
+  """Class that handles communication with the backend for
+  recommendation-related functions."""
+
   def __init__(self, environment_manager: EnvironmentManager):
     self.environment_manager = environment_manager
     self.reload_settings()
 
   def reload_settings(self):
+    """Reloads the settings file to get newest changes."""
     self.settings = load_settings()
 
   def get_recommendations(self):
+    """Queries the user to input a user ID for which to get recommendations. 
+    Then forwards this request to the backend, and prints it out."""
     self.reload_settings()
 
     run_mode = self.environment_manager.run_mode

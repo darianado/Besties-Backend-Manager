@@ -4,14 +4,21 @@ import requests, json, time
 from enums import RunMode
 
 class MatchingHandler:
+  """Class that handles communication with the backend for
+  matchmaking-related functions."""
+
   def __init__(self, environment_manager: EnvironmentManager):
     self.environment_manager = environment_manager
     self.reload_settings()
 
   def reload_settings(self):
+    """Reloads the settings file to get newest changes."""
     self.settings = load_settings()
 
   def like_user(self):
+    """Queries the user to input two user IDs sequentially, where the first indicates 
+    the user doing the liking, and the second indicates the user being liked. 
+    It then forwards this request to the backend, and prints it out."""
     uidOne = input("Type the user ID of the person liking: ")
     uidTwo = input("Type the user ID of the person being liked: ")
 
@@ -27,6 +34,7 @@ class MatchingHandler:
 
 
   def like_user(self, uidOne: str, uidTwo: str):
+    """Requests that the user indicated by uidOne likes the user indicated by uidTwo from the backend."""
     self.reload_settings()
 
     run_mode = self.environment_manager.run_mode
