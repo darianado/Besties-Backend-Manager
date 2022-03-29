@@ -1,7 +1,7 @@
 from typing import List
 
 from abstracts import SeedableService
-from constants import STORAGE_RUN_MODES
+from constants import FIRESTORE_USERS_COLLECTION_PATH, STORAGE_PROFILE_IMAGES_FOLDER, STORAGE_RUN_MODES
 from enums import RunMode
 from firebase_admin import firestore, storage
 from generator import Generator
@@ -37,18 +37,15 @@ class StorageService(SeedableService):
 
   def _save_url_to_user(self, uid, url):
     """Updates the 'profileImageUrl' field for a given user's Firestore document with a new url."""
-    users_collection_ref = self.settings["seeding"]["firestore_users_collection_path"]
-    firestore.client().collection(users_collection_ref).document(uid).set({
+    firestore.client().collection(FIRESTORE_USERS_COLLECTION_PATH).document(uid).set({
       "profileImageUrl": url
     }, merge=True)
 
   def seed(self, uids: List[str], _, generator: Generator, progress_callback) -> List[str]:
     """Seeds profile pictures to Firebase Storage."""
-    storage_profile_image_folder = self.settings["seeding"]["storage_profile_image_folder"]
-
     for uid in uids:
       local_file_path = generator.pick_photo()
-      blob = self.bucket.blob(storage_profile_image_folder + "/" + uid + ".jpg")
+      blob = self.bucket.blob(STORAGE_PROFILE_IMAGES_FOLDER + "/" + uid + ".jpg")
       blob.content_type = "image/jpeg"
 
       with open(local_file_path, "rb") as file:
@@ -62,8 +59,7 @@ class StorageService(SeedableService):
 
   def unseed(self, progress_callback) -> List[str]:
     """Unseeds profile pictures from Firebase Storage."""
-    storage_profile_image_folder = self.settings["seeding"]["storage_profile_image_folder"]
-    blobs = self.bucket.list_blobs(prefix=storage_profile_image_folder)
+    blobs = self.bucket.list_blobs(prefix=STORAGE_PROFILE_IMAGES_FOLDER)
 
     for blob in blobs:
       blob.delete()

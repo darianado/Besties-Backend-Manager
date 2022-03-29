@@ -3,7 +3,7 @@ import random
 from typing import List
 
 from abstracts import SeedableService
-from constants import FIRESTORE_BATCH_SIZE, FIRESTORE_RUN_MODES
+from constants import FIRESTORE_BATCH_SIZE, FIRESTORE_MATCH_COLLECTION_PATH, FIRESTORE_MATCH_MESSAGES_COLLECTION_PATH, FIRESTORE_RUN_MODES, FIRESTORE_USER_RECOMMENDATIONS_DOCUMENT_PATH, FIRESTORE_USERS_COLLECTION_PATH, FIRESTORE_USERS_DERIVED_COLLECTION_PATH
 from enums import RunMode
 from firebase_admin import firestore
 from environment_manager import EnvironmentManager
@@ -50,8 +50,7 @@ class FirestoreService(SeedableService):
 
   def _seed_users(self, uids: List[str], generator: Generator, progress_callback) -> List[str]:
     """Seeds user profiles to Firestore."""
-    users_collection_ref = self.settings["seeding"]["firestore_users_collection_path"]
-    user_data_ref = self.db.collection(users_collection_ref)
+    user_data_ref = self.db.collection(FIRESTORE_USERS_COLLECTION_PATH)
     split_size = min(FIRESTORE_BATCH_SIZE, len(uids))
 
     for split in [uids[i:i + split_size] for i in range(0, len(uids), split_size)]:
@@ -88,7 +87,6 @@ class FirestoreService(SeedableService):
     """Seeds messages for a given match document from Firestore.
     Seeding is random, and some matches may not have any messages seeded."""
     match_data = match_doc.to_dict()
-    firestore_match_messages_collection_path = self.settings['seeding']['firestore_match_messages_collection_path']
     should_generate_messages = random.getrandbits(1)
 
     if should_generate_messages:
@@ -102,15 +100,13 @@ class FirestoreService(SeedableService):
 
       batch = self.db.batch()
       for message in messages:
-        batch.set(match_doc.reference.collection(firestore_match_messages_collection_path).document(), message)
+        batch.set(match_doc.reference.collection(FIRESTORE_MATCH_MESSAGES_COLLECTION_PATH).document(), message)
 
       batch.commit()
 
   def _seed_messages(self, generator: Generator, progress_callback):
     """Seeds potential messages for all matches."""
-    firestore_match_collection_path = self.settings['seeding']['firestore_match_collection_path']
-
-    match_docs = self.db.collection(firestore_match_collection_path).stream()
+    match_docs = self.db.collection(FIRESTORE_MATCH_COLLECTION_PATH).stream()
 
     for doc in match_docs:
       self._seed_messages_for_match(generator, doc)
@@ -123,12 +119,29 @@ class FirestoreService(SeedableService):
     uids = self._seed_matches(uids, progress_callback)
     return self._seed_messages(generator, progress_callback)
 
-  def unseed(self, progress_callback) -> List[str]:
-    """Unseed user profiles, matches, and messages from Firestore."""
-    super().unseed(progress_callback)
+  def _unseed_recommendations(self, doc, progress_callback):
 
-    users_collection_ref = self.settings["seeding"]["firestore_users_collection_path"]
-    docs = self.db.collection(users_collection_ref).limit(FIRESTORE_BATCH_SIZE).stream()
+    doc.reference.collection(FIRESTORE_USERS_DERIVED_COLLECTION_PATH).document(FIRESTORE_USER_RECOMMENDATIONS_DOCUMENT_PATH).delete()
+    progress_callback()
+
+  def _unseed_users(self, progress_callback):
+    """Unseeds all user documents from Firestore.
+    Also deletes nested data."""
+    docs = self.db.collection(FIRESTORE_USERS_COLLECTION_PATH).limit(FIRESTORE_BATCH_SIZE).stream()
+    deleted = 0
+
+    for doc in docs:
+      self._unseed_recommendations(doc, progress_callback)
+      doc.reference.delete()
+      deleted = deleted + 1
+      progress_callback()
+
+    if deleted >= FIRESTORE_BATCH_SIZE:
+      return self.unseed(progress_callback)
+
+  def _unseed_messages(self, doc, progress_callback):
+    """Unseeds all messages nested under the provided match Firestore document."""
+    docs = self.db.collection(FIRESTORE_MATCH_MESSAGES_COLLECTION_PATH).limit(FIRESTORE_BATCH_SIZE).stream()
     deleted = 0
 
     for doc in docs:
@@ -138,3 +151,24 @@ class FirestoreService(SeedableService):
 
     if deleted >= FIRESTORE_BATCH_SIZE:
       return self.unseed(progress_callback)
+
+  def _unseed_matches(self, progress_callback):
+    """Unseeds all matches from Firestore.
+    Also deletes nested data."""
+    docs = self.db.collection(FIRESTORE_MATCH_COLLECTION_PATH).limit(FIRESTORE_BATCH_SIZE).stream()
+    deleted = 0
+
+    for doc in docs:
+      self._unseed_messages(doc, progress_callback)
+      doc.reference.delete()
+      deleted = deleted + 1
+      progress_callback()
+
+    if deleted >= FIRESTORE_BATCH_SIZE:
+      return self.unseed(progress_callback)
+
+  def unseed(self, progress_callback) -> List[str]:
+    """Unseed user profiles, matches, and messages from Firestore."""
+    super().unseed(progress_callback)
+    self._unseed_users(progress_callback)
+    self._unseed_matches(progress_callback)

@@ -12,10 +12,6 @@
                 "password": "Password123"
             }
         ],
-        "firestore_users_collection_path": "users",
-        "firestore_match_collection_path": "matches",
-        "firestore_match_messages_collection_path": "messages",
-        "storage_profile_image_folder": "profile_pictures",
         "profile_image_folder": "assets/images/",
         "min_interests_to_pick": 1,
         "max_interests_to_pick": 10,

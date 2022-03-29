@@ -9,14 +9,18 @@ from firebase_admin import credentials
 from constants import (FIREBASE_CREDENTIALS_FILE, FIREBASE_STORAGE_BUCKET,
                        SETTINGS_FILENAME)
 
+def list_contains_similar_pair(pair: List, list: List):
+  return (pair in list) or (pair.reverse() in list)
 
 def pick_random_pairs(n: int, lst: List):
   """Picks n number of random pairs from the supplied list. Each pair contains two distinct elements."""
   result = []
 
-  while(n > 0):
-    result.append(random.sample(lst, 2))
-    n -= 1
+  while(len(result) < n):
+    pick = random.sample(lst, 2)
+
+    if(not list_contains_similar_pair(pick, result)):
+      result.append(pick)
 
   return result
 
