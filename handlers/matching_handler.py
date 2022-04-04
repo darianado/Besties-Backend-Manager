@@ -15,7 +15,7 @@ class MatchingHandler:
     """Reloads the settings file to get newest changes."""
     self.settings = load_settings()
 
-  def like_user(self):
+  def like_user_ask_input(self):
     """Queries the user to input two user IDs sequentially, where the first indicates 
     the user doing the liking, and the second indicates the user being liked. 
     It then forwards this request to the backend, and prints it out."""

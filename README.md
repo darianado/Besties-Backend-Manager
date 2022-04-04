@@ -3,7 +3,7 @@
 **Application title:** Backend manager application
 
 **Authors:**
-* Nikolaj Banke Jense
+* Nikolaj Banke Jensen
 * Chukwudalu Esomeju
 * Dariana Dorin
 * Luca Brown

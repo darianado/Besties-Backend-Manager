@@ -36,7 +36,8 @@ class Functions():
     """First-step function when selecting the element to get recommendations for a given user."""
     self.recommendation_handler.get_recommendations()
 
+  @sleepy_exit
   @safe_exit
   def like_user(self):
     """First-step function when liking a given user."""
-    self.matching_handler.like_user()
+    self.matching_handler.like_user_ask_input()
