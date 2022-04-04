@@ -1,10 +1,10 @@
 {
-    "emulator_run_mode": true,
+    "emulator_run_mode": false,
     "seeding": {
         "auth_should_unseed": true,
         "firestore_should_unseed": false,
         "storage_should_unseed": false,
-        "number_of_random_users_to_seed": 2,
+        "number_of_random_users_to_seed": 100,
         "percentage_of_users_to_match": 0.2,
         "required_accounts": [
             {

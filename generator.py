@@ -114,7 +114,7 @@ class Generator:
       "preferences": {
         "categorizedInterests": self.pick_interests().to_list(),
         "genders": [own_gender],
-        "maxAge": 50,
+        "maxAge": 40,
         "minAge": 18
       }
     }
